@@ -4,10 +4,304 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - ABW Curious</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            color: #4e54c8;
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .logo p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        header nav ul {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        header nav ul li a {
+            color: #555;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        header nav ul li a:hover {
+            color: #4e54c8;
+        }
+        
+        header nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #4e54c8;
+            transition: width 0.3s;
+        }
+        
+        header nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 2rem auto;
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            width: 250px;
+            flex-shrink: 0;
+        }
+        
+        .user-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-profile img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid #4e54c8;
+        }
+        
+        .user-profile a {
+            font-weight: 600;
+            color: #4e54c8;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .user-profile p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar nav ul {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .sidebar nav ul li, 
+        .sidebar nav ul a {
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            font-weight: 500;
+        }
+        
+        .sidebar nav ul li:hover,
+        .sidebar nav ul a:hover {
+            background-color: #f0f2fd;
+            color: #4e54c8;
+        }
+        
+        .sidebar nav ul li.active {
+            background-color: #4e54c8;
+            color: white;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex-grow: 1;
+        }
+        
+        section {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #4e54c8;
+        }
+        
+        /* Subject Cards */
+        .subject-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .subject-card {
+            background-color: #f8faff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid #eaeef9;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(78, 84, 200, 0.1);
+        }
+        
+        .subject-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .subject-card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subject-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Topic Grid */
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .topic-card {
+            background-color: #f8faff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid #eaeef9;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .topic-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .topic-card h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            padding: 0.7rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-align: center;
+            margin-top: auto;
+        }
+        
+        .btn-secondary {
+            background-color: #4e54c8;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #3c40a0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(78, 84, 200, 0.2);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            header nav ul {
+                gap: 1rem;
+            }
+            
+            .subject-cards, .topic-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div>
     <header>
         <div class="logo">
             <h1>ABW Curious</h1>
@@ -21,21 +315,21 @@
             </ul>
         </nav> 
     </header>
-    </div>
+    
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="user-profile">
                 <img src="/api/placeholder/100/100" alt="Profile">
-                <a href="enhanced-profile.html">Welcome Back Suyogy</a>
+                <a href="enhanced-profile.html">Welcome Back, Suyogy</a>
                 <p>Class 10</p>
             </div>
             <nav>
                 <ul>
                     <li class="active">My Subjects</li>
-                    <a href="learning-path.html">Learning Path</a>                   
-                    <li>Practice</li>
-                    <li>Library</li>
-                    <li>AI Tutor</li>
+                    <li><a href="learning-path.html">Learning Path</a></li>                   
+                    <li><a href="practice.html">Practice</a></li>
+                    <li><a href="library.html">Library</a></li>
+                    <li><a href="ai-tutor.html">AI Tutor</a></li>
                 </ul>
             </nav>
         </aside>
@@ -54,6 +348,11 @@
                         <h3>Physics</h3>
                         <p>Topics Available: 18</p>
                     </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">🧪</div>
+                        <h3>Chemistry</h3>
+                        <p>Topics Available: 16</p>
+                    </div>
                 </div>
             </section>
 
@@ -66,14 +365,43 @@
                         <a href="learning.html" class="btn btn-secondary">Start Learning</a>
                     </div>
                     <div class="topic-card">
+                        <div class="topic-icon">🧮</div>
+                        <h3>Quadratic Equations</h3>
+                        <a href="learning-quadratic.html" class="btn btn-secondary">Start Learning</a>
+                    </div>
+                    <div class="topic-card">
                         <div class="topic-icon">🧪</div>
                         <h3>Chemical Reactions</h3>
-                        <button class="btn btn-secondary">Start Learning</button>
+                        <a href="learning-chemical.html" class="btn btn-secondary">Start Learning</a>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="learning-progress">
+                <h2>Your Learning Progress</h2>
+                <div class="progress-cards">
+                    <div class="progress-card">
+                        <div class="progress-info">
+                            <h3>Overall Completion</h3>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 65%;"></div>
+                            </div>
+                            <p>65% Complete</p>
+                        </div>
                     </div>
                 </div>
             </section>
         </main>
     </div>
-    <script src="script.js"></script>
+    
+    <script>
+        // Simple interactive elements
+        document.querySelectorAll('.subject-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const subject = this.querySelector('h3').textContent;
+                alert(`Opening ${subject} dashboard`);
+            });
+        });
+    </script>
 </body>
 </html>
