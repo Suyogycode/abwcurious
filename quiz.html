@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Quiz - ABW Curious</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h2>Physics Quiz: Laws of Motion</h2>
+            <div class="quiz-info">
+                <span>Time Remaining: <span id="timer">15:00</span></span>
+                <span>Questions: <span id="questionCount">1/10</span></span>
+            </div>
+        </div>
+
+        <div class="quiz-content">
+            <div class="question-card">
+                <p class="question-text">What is Newton's First Law of Motion?</p>
+                <div class="options-list">
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1a">
+                        <label for="q1a">An object in motion stays in motion unless acted upon by an external force</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1b">
+                        <label for="q1b">Force equals mass times acceleration</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1c">
+                        <label for="q1c">Every action has an equal and opposite reaction</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1d">
+                        <label for="q1d">Objects fall at the same rate in a vacuum</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-navigation">
+                <button class="btn btn-secondary" id="prevQuestion">Previous</button>
+                <button class="btn btn-primary" id="nextQuestion">Next</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

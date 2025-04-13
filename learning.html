@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABW Curious</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <script src="https://unpkg.com/lucide-react@0.41.0/dist/lucide.js"></script>
+    <style>
+        .active-tab {
+            border-bottom: 2px solid #3b82f6;
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Top Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0">
+                    <a class="text-xl font-bold text-blue-600" href="index.html">ABW Curious</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500">Topic: Laws of Motion</span>
+                    <div class="h-4 w-px bg-gray-300"></div>
+                    <span class="text-sm text-gray-500">Progress: 60%</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-white rounded-lg shadow">
+            <!-- Learning Tabs -->
+            <div class="border-b border-gray-200">
+                <nav class="flex -mb-px">
+                    <button onclick="showTab('concept')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2 active-tab" id="concept-tab">
+                        <i data-lucide="book-open" size="20"></i>
+                        <span>Concept</span>
+                    </button>
+                    <button onclick="showTab('video')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2" id="video-tab">
+                        <i data-lucide="video" size="20"></i>
+                        <span>Video Lecture</span>
+                    </button>
+                    <button onclick="showTab('ar')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2" id="ar-tab">
+                        <i data-lucide="box" size="20"></i>
+                        <span>AR Experience</span>
+                    </button>
+                    <button onclick="showTab('practice')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2" id="practice-tab">
+                        <i data-lucide="brain" size="20"></i>
+                        <span>Practice</span>
+                    </button>
+                    <button onclick="showTab('resources')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2" id="resources-tab">
+                        <i data-lucide="file-text" size="20"></i>
+                        <span>Resources</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-6">
+                <div id="concept-content" class="tab-content">
+                    <div class="space-y-4">
+                        <h2 class="text-2xl font-bold text-gray-900">Newton's First Law of Motion</h2>
+                        <p class="text-gray-600">An object will remain at rest or in uniform motion in a straight line unless acted upon by an external force.</p>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-blue-700">Key Points</h3>
+                            <ul class="mt-2 space-y-2 text-blue-600">
+                                <li>• Inertia is the resistance to change in motion</li>
+                                <li>• Objects maintain their state without external forces</li>
+                                <li>• Force is required to change an object's motion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Tutor Chat -->
+                <div class="fixed bottom-4 right-4">
+                    <button class="bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors">
+                        <i data-lucide="message-circle" size="24"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tab) {
+            const tabs = ['concept', 'video', 'ar', 'practice', 'resources'];
+            tabs.forEach(t => {
+                document.getElementById(t + '-tab').classList.remove('active-tab');
+                document.getElementById(t + '-content').style.display = 'none';
+            });
+            document.getElementById(tab + '-tab').classList.add('active-tab');
+            document.getElementById(tab + '-content').style.display = 'block';
+        }
+        document.getElementById('video-content').style.display = 'none';
+        document.getElementById('ar-content').style.display = 'none';
+        document.getElementById('practice-content').style.display = 'none';
+        document.getElementById('resources-content').style.display = 'none';
+    </script>
+</body>
+</html>

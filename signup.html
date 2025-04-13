@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - ABW Curious</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="signup-container">
+        <form id="signupForm" class="signup-form">
+            <h2>Create Your Account</h2>
+            <div class="social-login">
+                <button type="button" class="google-signup">
+                    <img src="/api/placeholder/20/20" alt="Google">
+                    Sign Up with Google
+                </button>
+            </div>
+            <div class="divider">
+                <span>or</span>
+            </div>
+            <div class="form-group">
+                <input type="text" id="username" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Create Password" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            </div>
+            <a href ="profile.html" type="submit" class="btn btn-primary">Sign Up</a>
+            <div class="form-footer">
+                <p>Already have an account? <a href="login.html">Login</a></p>
+            </div>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

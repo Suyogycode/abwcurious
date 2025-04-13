@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ABW Curious</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div>
+    <header>
+        <div class="logo">
+            <h1>ABW Curious</h1>
+            <p>A Better Way of Learning</p> 
+        </div> 
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+            </ul>
+        </nav> 
+    </header>
+    </div>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="user-profile">
+                <img src="/api/placeholder/100/100" alt="Profile">
+                <a href="enhanced-profile.html">Welcome Back Suyogy</a>
+                <p>Class 10</p>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active">My Subjects</li>
+                    <a href="learning-path.html">Learning Path</a>                   
+                    <li>Practice</li>
+                    <li>Library</li>
+                    <li>AI Tutor</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section class="selected-subjects">
+                <h2>Your Selected Subjects</h2>
+                <div class="subject-cards">
+                    <div class="subject-card">
+                        <div class="subject-icon">📐</div>
+                        <h3>Mathematics</h3>
+                        <p>Topics Available: 24</p>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">🚀</div>
+                        <h3>Physics</h3>
+                        <p>Topics Available: 18</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="recommended-topics">
+                <h2>Recommended Topics</h2>
+                <div class="topic-grid">
+                    <div class="topic-card">
+                        <div class="topic-icon">⚖️</div>
+                        <h3>Laws of Motion</h3>
+                        <a href="learning.html" class="btn btn-secondary">Start Learning</a>
+                    </div>
+                    <div class="topic-card">
+                        <div class="topic-icon">🧪</div>
+                        <h3>Chemical Reactions</h3>
+                        <button class="btn btn-secondary">Start Learning</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

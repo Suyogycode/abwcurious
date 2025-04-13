@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tutor - ABW Curious</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="tutor-container">
+        <div class="tutor-sidebar">
+            <h3>Recent Topics</h3>
+            <div class="topic-list">
+                <div class="topic-item active">Laws of Motion</div>
+                <div class="topic-item">Chemical Bonding</div>
+                <div class="topic-item">Algebraic Equations</div>
+            </div>
+            <div class="quick-actions">
+                <button class="btn btn-secondary">New Conversation</button>
+                <button class="btn btn-secondary">Save Notes</button>
+            </div>
+        </div>
+
+        <div class="chat-main">
+            <div class="chat-header">
+                <h2>AI Tutor Chat</h2>
+                <div class="chat-tools">
+                    <button class="tool-btn">📷</button>
+                    <button class="tool-btn">🎤</button>
+                    <button class="tool-btn">📝</button>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message tutor-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <p>Hello! I'm your AI tutor. What would you like to learn about today?</p>
+                    </div>
+                </div>
+                <div class="message user-message">
+                    <div class="message-content">
+                        <p>Can you explain Newton's First Law of Motion?</p>
+                    </div>
+                </div>
+                <div class="message tutor-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <p>Let me explain with an example...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <input type="text" placeholder="Type your question here..." id="messageInput">
+                <button class="btn btn-primary" id="sendMessage">Send</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
