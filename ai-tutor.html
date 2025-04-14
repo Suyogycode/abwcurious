@@ -330,18 +330,34 @@
         }
         
         .chat-input {
-            padding: 0.8rem 1rem;
+            display: flex;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 600px;
         }
         
-        .chat-input input {
-            padding: 0.6rem 0.8rem;
-            font-size: 0.9rem;
+        #messageInput {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-size: 16px;
         }
         
-        .btn {
-            padding: 0.6rem 1rem;
-            font-size: 0.8rem;
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            cursor: pointer;
         }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+        }
+
     }
     </style>
 </head>
@@ -391,10 +407,19 @@
             </div>
 
             <div class="chat-input">
-                <input type="text" placeholder="Type your question here..." id="messageInput">
-                <button class="btn btn-primary" id="sendMessage">Send</button>
-            </div>
-        </div>
+        <input type="text" placeholder="Type your question here..." id="messageInput">
+        <button class="btn btn-primary" id="sendMessage">Send</button>
     </div>
+    
+    <script>
+        // Basic functionality for the chat input
+        document.getElementById('sendMessage').addEventListener('click', function() {
+            const message = document.getElementById('messageInput').value;
+            if (message) {
+                console.log('Message sent:', message);
+                document.getElementById('messageInput').value = '';
+            }
+        });
+    </script>
 </body>
 </html>
