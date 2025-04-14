@@ -20,48 +20,58 @@
     }
 
     /* Header styles */
-    header {
-        background-color: white;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        padding: 1rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
+            /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .logo {
-        margin-right: 1rem;
-    }
+        .logo h1 {
+            color: #4e54c8;
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+        }
 
-    .logo h1 {
-        font-size: 1.8rem;
-        color: #3a86ff;
-        margin-bottom: 0.2rem;
-        cursor: pointer;
-    }
+        .logo p {
+            color: #666;
+            font-size: 0.9rem;
+        }
 
-    .logo p {
-        font-size: 0.9rem;
-        color: #666;
-    }
+        header nav ul {
+            display: flex;
+            gap: 2rem;
+        }
 
-    nav ul {
-        display: flex;
-        list-style: none;
-        gap: 1.5rem;
-    }
+        header nav ul li a {
+            color: #555;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s;
+        }
 
-    nav a {
-        text-decoration: none;
-        color: #333;
-        font-weight: 500;
-        transition: color 0.3s;
-    }
+        header nav ul li a:hover {
+            color: #4e54c8;
+        }
 
-    nav a:hover {
-        color: #3a86ff;
-    }
+        header nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #4e54c8;
+            transition: width 0.3s;
+        }
+
+        header nav ul li a:hover::after {
+            width: 100%;
+        }
 
     /* Hero section */
     .hero {
