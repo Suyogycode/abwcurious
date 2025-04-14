@@ -4,12 +4,292 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABW Curious - Learn Smarter</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+    /* Base styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f9f9f9;
+    }
+
+    /* Header styles */
+    header {
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        margin-right: 1rem;
+    }
+
+    .logo h1 {
+        font-size: 1.8rem;
+        color: #3a86ff;
+        margin-bottom: 0.2rem;
+        cursor: pointer;
+    }
+
+    .logo p {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    nav ul {
+        display: flex;
+        list-style: none;
+        gap: 1.5rem;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    nav a:hover {
+        color: #3a86ff;
+    }
+
+    /* Hero section */
+    .hero {
+        display: flex;
+        align-items: center;
+        padding: 3rem 1rem;
+        background: linear-gradient(135deg, #e0f7fa 0%, #bbdefb 100%);
+        gap: 2rem;
+    }
+
+    .hero-content {
+        flex: 1;
+    }
+
+    .hero-image {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #2e3a59;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        color: #4a4a4a;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    /* Button styles */
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #3a86ff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #2a75e0;
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        background-color: white;
+        color: #3a86ff;
+        border: 2px solid #3a86ff;
+    }
+
+    .btn-secondary:hover {
+        background-color: #f0f8ff;
+        transform: translateY(-2px);
+    }
+
+    /* Features section */
+    .features {
+        padding: 4rem 1rem;
+        background-color: white;
+        text-align: center;
+    }
+
+    .features h3 {
+        font-size: 2rem;
+        margin-bottom: 2.5rem;
+        color: #2e3a59;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .feature {
+        padding: 1.5rem;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .feature h4 {
+        font-size: 1.3rem;
+        margin-bottom: 0.7rem;
+        color: #2e3a59;
+    }
+
+    .feature a {
+        display: block;
+        font-size: 1.3rem;
+        margin-bottom: 0.7rem;
+        text-decoration: none;
+    }
+
+    .feature p {
+        color: #666;
+    }
+
+    /* Footer */
+    footer {
+        background-color: #2e3a59;
+        color: white;
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 1rem;
+            margin-right: 0;
+        }
+
+        nav ul {
+            justify-content: center;
+            margin-top: 0.5rem;
+            gap: 1rem;
+        }
+
+        .hero {
+            flex-direction: column;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+        }
+
+        .hero-buttons {
+            justify-content: center;
+        }
+
+        .feature-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .logo h1 {
+            font-size: 1.5rem;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+        }
+
+        nav ul {
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hero h2 {
+            font-size: 1.7rem;
+        }
+
+        .hero p {
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        .hero-buttons {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .features h3 {
+            font-size: 1.7rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature {
+            padding: 1rem;
+        }
+    }
+    </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <h1 href ="index.html">ABW Curious</h1>
+            <h1>ABW Curious</h1>
             <p>A Better Way of Learning</p>
         </div>
         <nav>
@@ -33,7 +313,7 @@
                 </div>
             </div>
             <div class="hero-image">
-                <img href="quiz.html" src="/api/placeholder/500/400" alt="Learning Illustration">
+                <img src="/api/placeholder/500/400" alt="Learning Illustration">
             </div>
         </section>
 
