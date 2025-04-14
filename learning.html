@@ -5,26 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABW Curious</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
-    <script src="https://unpkg.com/lucide-react@0.41.0/dist/lucide.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
     <style>
         .active-tab {
             border-bottom: 2px solid #3b82f6;
             color: #3b82f6;
         }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        #concept-content {
+            display: block;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #dbeafe;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #3b82f6;
+            width: 60%;
+            transition: width 0.5s ease;
+        }
+        
+        .chat-popup {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            z-index: 1000;
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            height: 340px;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .chat-input {
+            border-top: 1px solid #e5e7eb;
+            padding: 12px;
+        }
+        
+        .message {
+            margin-bottom: 12px;
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 18px;
+        }
+        
+        .user-message {
+            background-color: #3b82f6;
+            color: white;
+            margin-left: auto;
+            border-top-right-radius: 4px;
+        }
+        
+        .bot-message {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            margin-right: auto;
+            border-top-left-radius: 4px;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50">
     <!-- Top Navigation -->
-    <nav class="bg-white shadow-sm">
+    <nav class="bg-white shadow-sm sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex-shrink-0">
+                <div class="flex-shrink-0 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838l-2.727 1.17 1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                    </svg>
                     <a class="text-xl font-bold text-blue-600" href="index.html">ABW Curious</a>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500">Topic: Laws of Motion</span>
+                    <span class="text-sm font-medium text-gray-700">Topic: Laws of Motion</span>
                     <div class="h-4 w-px bg-gray-300"></div>
-                    <span class="text-sm text-gray-500">Progress: 60%</span>
+                    <div class="flex flex-col w-32">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-xs font-medium text-gray-700">Progress</span>
+                            <span class="text-xs font-medium text-gray-700">60%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill"></div>
+                        </div>
+                    </div>
+                    <button class="ml-2 bg-blue-100 hover:bg-blue-200 text-blue-800 font-semibold py-2 px-4 rounded-full text-sm transition-colors">
+                        <i data-feather="user" class="w-4 h-4 inline mr-1"></i>
+                        My Profile
+                    </button>
                 </div>
             </div>
         </div>
@@ -37,23 +138,23 @@
             <div class="border-b border-gray-200">
                 <nav class="flex -mb-px">
                     <button onclick="showTab('concept')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2 active-tab" id="concept-tab">
-                        <i data-lucide="book-open" size="20"></i>
+                        <i data-feather="book-open" class="w-5 h-5"></i>
                         <span>Concept</span>
                     </button>
-                    <button onclick="showTab('video')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2" id="video-tab">
-                        <i data-lucide="video" size="20"></i>
+                    <button onclick="showTab('video')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition-colors" id="video-tab">
+                        <i data-feather="video" class="w-5 h-5"></i>
                         <span>Video Lecture</span>
                     </button>
-                    <button onclick="showTab('ar')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2" id="ar-tab">
-                        <i data-lucide="box" size="20"></i>
+                    <button onclick="showTab('ar')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition-colors" id="ar-tab">
+                        <i data-feather="box" class="w-5 h-5"></i>
                         <span>AR Experience</span>
                     </button>
-                    <button onclick="showTab('practice')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2" id="practice-tab">
-                        <i data-lucide="brain" size="20"></i>
+                    <button onclick="showTab('practice')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition-colors" id="practice-tab">
+                        <i data-feather="check-circle" class="w-5 h-5"></i>
                         <span>Practice</span>
                     </button>
-                    <button onclick="showTab('resources')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2" id="resources-tab">
-                        <i data-lucide="file-text" size="20"></i>
+                    <button onclick="showTab('resources')" class="px-6 py-4 text-sm font-medium flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition-colors" id="resources-tab">
+                        <i data-feather="file-text" class="w-5 h-5"></i>
                         <span>Resources</span>
                     </button>
                 </nav>
@@ -61,25 +162,316 @@
 
             <!-- Content Area -->
             <div class="p-6">
-                <div id="concept-content" class="tab-content">
-                    <div class="space-y-4">
+                <!-- Concept Content -->
+                <div id="concept-content" class="tab-content space-y-6">
+                    <div class="border-b pb-6">
                         <h2 class="text-2xl font-bold text-gray-900">Newton's First Law of Motion</h2>
-                        <p class="text-gray-600">An object will remain at rest or in uniform motion in a straight line unless acted upon by an external force.</p>
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <h3 class="text-lg font-semibold text-blue-700">Key Points</h3>
-                            <ul class="mt-2 space-y-2 text-blue-600">
-                                <li>• Inertia is the resistance to change in motion</li>
-                                <li>• Objects maintain their state without external forces</li>
-                                <li>• Force is required to change an object's motion</li>
+                        <p class="mt-2 text-gray-600 leading-relaxed">An object will remain at rest or in uniform motion in a straight line unless acted upon by an external force. This principle, also known as the law of inertia, was first proposed by Sir Isaac Newton in his groundbreaking work "Philosophiæ Naturalis Principia Mathematica" published in 1687.</p>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-5 rounded-lg border border-blue-100">
+                        <h3 class="text-lg font-semibold text-blue-700 flex items-center">
+                            <i data-feather="star" class="w-5 h-5 mr-2"></i>
+                            Key Points
+                        </h3>
+                        <ul class="mt-3 space-y-3 text-gray-700">
+                            <li class="flex items-start">
+                                <span class="inline-block bg-blue-200 rounded-full p-1 mr-2 mt-1">
+                                    <i data-feather="check" class="w-3 h-3 text-blue-700"></i>
+                                </span>
+                                <span><strong>Inertia:</strong> The resistance of any physical object to changes in its velocity (including changes in direction). It's a fundamental property of matter.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="inline-block bg-blue-200 rounded-full p-1 mr-2 mt-1">
+                                    <i data-feather="check" class="w-3 h-3 text-blue-700"></i>
+                                </span>
+                                <span><strong>State Preservation:</strong> Objects maintain their state of rest or uniform motion in a straight line unless external forces act upon them.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="inline-block bg-blue-200 rounded-full p-1 mr-2 mt-1">
+                                    <i data-feather="check" class="w-3 h-3 text-blue-700"></i>
+                                </span>
+                                <span><strong>External Force:</strong> A force is required to change an object's motion, whether to start, stop, or change direction.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white border rounded-lg p-5 shadow-sm card-hover">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-3">Real-World Examples</h3>
+                            <ul class="space-y-2 text-gray-600">
+                                <li class="flex items-start">
+                                    <span class="text-blue-500 mr-2">•</span>
+                                    A passenger moving forward when a car brakes suddenly
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-500 mr-2">•</span>
+                                    Objects sliding on a table when tablecloth is pulled quickly
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-500 mr-2">•</span>
+                                    Astronauts floating continuously in space without propulsion
+                                </li>
                             </ul>
+                        </div>
+                        
+                        <div class="bg-white border rounded-lg p-5 shadow-sm card-hover">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-3">Historical Context</h3>
+                            <p class="text-gray-600">Before Newton, Aristotle incorrectly believed that objects would naturally come to rest unless forces were applied continuously. Galileo Galilei was the first to suggest the concept of inertia, which Newton later formalized into his First Law of Motion.</p>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Video Content -->
+                <div id="video-content" class="tab-content space-y-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Video Lecture: Newton's First Law</h2>
+                    <div class="aspect-w-16 aspect-h-9 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <div class="text-center">
+                            <i data-feather="video" class="w-16 h-16 mx-auto text-gray-400 mb-4"></i>
+                            <p class="text-gray-500 font-medium">Video lecture will be displayed here</p>
+                            <button class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors">
+                                Play Video
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-medium text-gray-700 mb-2">Video Transcript</h3>
+                        <p class="text-gray-600 text-sm">The transcript for this video lecture would appear here, allowing students to read along or review the content without watching the video again.</p>
+                    </div>
+                </div>
+                
+                <!-- AR Experience Content -->
+                <div id="ar-content" class="tab-content space-y-6">
+                    <h2 class="text-2xl font-bold text-gray-900">AR Experience: Explore Newton's First Law</h2>
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-6">
+                        <div class="flex">
+                            <div class="mr-6">
+                                <div class="bg-white rounded-lg shadow-md p-4 w-64 h-64 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <div class="rounded-full bg-indigo-100 w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                                            <i data-feather="smartphone" class="text-indigo-600 w-8 h-8"></i>
+                                        </div>
+                                        <p class="text-gray-500 text-sm">Scan QR code to experience AR</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-semibold text-indigo-800 mb-3">Interactive AR Experience</h3>
+                                <p class="text-gray-600 mb-4">Experience Newton's First Law in augmented reality! Point your device at a flat surface and interact with virtual objects to see inertia in action.</p>
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-indigo-200 flex items-center justify-center mr-3">
+                                            <span class="font-semibold text-indigo-800">1</span>
+                                        </div>
+                                        <p class="text-gray-700">Download the ABW Curious AR app</p>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-indigo-200 flex items-center justify-center mr-3">
+                                            <span class="font-semibold text-indigo-800">2</span>
+                                        </div>
+                                        <p class="text-gray-700">Scan the QR code with the app</p>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-indigo-200 flex items-center justify-center mr-3">
+                                            <span class="font-semibold text-indigo-800">3</span>
+                                        </div>
+                                        <p class="text-gray-700">Point your camera at a flat surface and explore!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Practice Content -->
+                <div id="practice-content" class="tab-content space-y-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Practice Questions</h2>
+                    <div class="space-y-6">
+                        <div class="bg-white border rounded-lg shadow-sm p-5">
+                            <h3 class="font-semibold text-gray-800 mb-3">Question 1 of 5</h3>
+                            <p class="text-gray-700 mb-4">An astronaut in space throws a ball. If no other forces act on the ball, what will happen to it?</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="radio" name="q1" id="q1a" class="mr-2">
+                                    <label for="q1a" class="text-gray-600">It will slow down and eventually stop</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" name="q1" id="q1b" class="mr-2">
+                                    <label for="q1b" class="text-gray-600">It will continue moving in a straight line at constant speed</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" name="q1" id="q1c" class="mr-2">
+                                    <label for="q1c" class="text-gray-600">It will follow a curved path</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" name="q1" id="q1d" class="mr-2">
+                                    <label for="q1d" class="text-gray-600">It will accelerate in the direction it was thrown</label>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex justify-end">
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors">
+                                    Submit Answer
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <button class="flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                                <i data-feather="arrow-left" class="w-4 h-4 mr-1"></i>
+                                Previous 
+                            </button>
+                            <div class="flex space-x-1">
+                                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                                <span class="w-2 h-2 rounded-full bg-gray-300"></span>
+                                <span class="w-2 h-2 rounded-full bg-gray-300"></span>
+                                <span class="w-2 h-2 rounded-full bg-gray-300"></span>
+                                <span class="w-2 h-2 rounded-full bg-gray-300"></span>
+                            </div>
+                            <button class="flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                                Next
+                                <i data-feather="arrow-right" class="w-4 h-4 ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Resources Content -->
+                <div id="resources-content" class="tab-content space-y-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Additional Resources</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="flex items-start">
+                                <div class="p-2 bg-green-100 rounded-md mr-4">
+                                    <i data-feather="book" class="w-6 h-6 text-green-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Recommended Reading</h3>
+                                    <ul class="mt-2 space-y-2 text-gray-600">
+                                        <li>"Physics for Scientists and Engineers" - Chapter 4</li>
+                                        <li>"Conceptual Physics" by Paul G. Hewitt - Pages 28-35</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="flex items-start">
+                                <div class="p-2 bg-blue-100 rounded-md mr-4">
+                                    <i data-feather="link" class="w-6 h-6 text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Online Resources</h3>
+                                    <ul class="mt-2 space-y-2 text-gray-600">
+                                        <li><a href="#" class="text-blue-600 hover:underline">Khan Academy: Newton's Laws</a></li>
+                                        <li><a href="#" class="text-blue-600 hover:underline">PhET Interactive Simulations</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="flex items-start">
+                                <div class="p-2 bg-purple-100 rounded-md mr-4">
+                                    <i data-feather="download" class="w-6 h-6 text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Downloadable Materials</h3>
+                                    <ul class="mt-2 space-y-2 text-gray-600">
+                                        <li><a href="#" class="text-blue-600 hover:underline">Lecture Notes (PDF)</a></li>
+                                        <li><a href="#" class="text-blue-600 hover:underline">Practice Problems Worksheet</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="flex items-start">
+                                <div class="p-2 bg-yellow-100 rounded-md mr-4">
+                                    <i data-feather="film" class="w-6 h-6 text-yellow-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Additional Videos</h3>
+                                    <ul class="mt-2 space-y-2 text-gray-600">
+                                        <li><a href="#" class="text-blue-600 hover:underline">Crash Course: Newton's Laws</a></li>
+                                        <li><a href="#" class="text-blue-600 hover:underline">Real-world Applications of Inertia</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Related Topics -->
+        <div class="mt-8">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Related Topics</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <a href="#" class="bg-white p-4 rounded-lg border shadow-sm hover:shadow-md transition-shadow flex items-center">
+                    <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                        <i data-feather="arrow-right" class="w-5 h-5 text-red-600"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900">Newton's Second Law</h4>
+                        <p class="text-sm text-gray-500">Force, mass and acceleration</p>
+                    </div>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg border shadow-sm hover:shadow-md transition-shadow flex items-center">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                        <i data-feather="refresh-cw" class="w-5 h-5 text-green-600"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900">Newton's Third Law</h4>
+                        <p class="text-sm text-gray-500">Action and reaction forces</p>
+                    </div>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg border shadow-sm hover:shadow-md transition-shadow flex items-center">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <i data-feather="trending-down" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900">Law of Gravitation</h4>
+                        <p class="text-sm text-gray-500">Universal gravitational force</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 
-                <!-- AI Tutor Chat -->
-                <div class="fixed bottom-4 right-4">
-                    <button class="bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors">
-                        <i data-lucide="message-circle" size="24"></i>
+    <!-- AI Tutor Chat -->
+    <div class="fixed bottom-6 right-6 z-20">
+        <!-- Chat Button -->
+        <button id="chatButton" class="bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
+            <i data-feather="message-circle" class="w-6 h-6"></i>
+        </button>
+        
+        <!-- Chat Popup -->
+        <div id="chatPopup" class="chat-popup">
+            <div class="bg-blue-600 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <i data-feather="cpu" class="w-5 h-5 mr-2"></i>
+                    <h3 class="font-medium">AI Learning Assistant</h3>
+                </div>
+                <button id="closeChat" class="text-white hover:text-blue-100 transition-colors">
+                    <i data-feather="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="chat-messages">
+                <div class="message bot-message">
+                    Hello! I'm your AI learning assistant for Newton's Laws of Motion. How can I help you understand this topic better?
+                </div>
+                <div class="message user-message">
+                    Can you explain inertia in simple terms?
+                </div>
+                <div class="message bot-message">
+                    Sure! Think of inertia as an object's "stubbornness" to change its motion. If something is sitting still, it wants to stay still. If it's moving, it wants to keep moving the same way. That's why you lurch forward when a car stops suddenly - your body keeps wanting to move forward!
+                </div>
+            </div>
+            <div class="chat-input">
+                <div class="flex">
+                    <input type="text" placeholder="Ask a question..." class="flex-1 border rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 transition-colors">
+                        <i data-feather="send" class="w-5 h-5"></i>
                     </button>
                 </div>
             </div>
@@ -87,19 +479,29 @@
     </div>
 
     <script>
-        function showTab(tab) {
-            const tabs = ['concept', 'video', 'ar', 'practice', 'resources'];
-            tabs.forEach(t => {
-                document.getElementById(t + '-tab').classList.remove('active-tab');
-                document.getElementById(t + '-content').style.display = 'none';
+        // Initialize Feather icons
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+            
+            // Chat functionality
+            const chatButton = document.getElementById('chatButton');
+            const chatPopup = document.getElementById('chatPopup');
+            const closeChat = document.getElementById('closeChat');
+            
+            chatButton.addEventListener('click', function() {
+                if (chatPopup.style.display === 'block') {
+                    chatPopup.style.display = 'none';
+                } else {
+                    chatPopup.style.display = 'block';
+                }
             });
-            document.getElementById(tab + '-tab').classList.add('active-tab');
-            document.getElementById(tab + '-content').style.display = 'block';
-        }
-        document.getElementById('video-content').style.display = 'none';
-        document.getElementById('ar-content').style.display = 'none';
-        document.getElementById('practice-content').style.display = 'none';
-        document.getElementById('resources-content').style.display = 'none';
-    </script>
-</body>
-</html>
+            
+            closeChat.addEventListener('click', function() {
+                chatPopup.style.display = 'none';
+            });
+        });
+        
+        // Tab switching functionality
+        function showTab(tab) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-
