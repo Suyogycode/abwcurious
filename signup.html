@@ -4,39 +4,286 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - ABW Curious</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Variables (Consistent with other pages) --- */
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --text-main: #1f2937;
+            --text-light: #6b7280;
+            --bg-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            --white: #ffffff;
+            --error: #ef4444;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        /* --- 2. Card Container --- */
+        .signup-container {
+            background-color: var(--white);
+            width: 100%;
+            max-width: 450px; /* Slightly wider than login to accommodate content */
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            animation: fadeIn Up 0.6s ease-out;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .signup-header h2 {
+            color: var(--text-main);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .signup-header p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* --- 3. Form Elements --- */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Error state for password mismatch */
+        input.error {
+            border-color: var(--error);
+        }
+        
+        .error-msg {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        /* --- 4. Buttons --- */
+        .btn-primary {
+            width: 100%;
+            padding: 0.9rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* --- 5. Social Login --- */
+        .google-signup {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0.8rem;
+            background-color: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            color: var(--text-main);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .google-signup:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .google-signup img {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* --- 6. Divider --- */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background-color: #e5e7eb;
+        }
+
+        .divider span {
+            padding: 0 10px;
+        }
+
+        /* --- 7. Footer --- */
+        .form-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Back to home link absolute positioning */
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
+
+    <a href="index.html" class="back-home">← Back to Home</a>
+
     <div class="signup-container">
-        <form id="signupForm" class="signup-form">
+        <div class="signup-header">
             <h2>Create Your Account</h2>
-            <div class="social-login">
-                <button type="button" class="google-signup">
-                    <img src="/api/placeholder/20/20" alt="Google">
-                    Sign Up with Google
-                </button>
-            </div>
+            <p>Join ABWcurious and start learning smarter</p>
+        </div>
+
+        <form id="signupForm">
+            <button type="button" class="google-signup">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo">
+                Sign Up with Google
+            </button>
+
             <div class="divider">
                 <span>or</span>
             </div>
+
             <div class="form-group">
                 <input type="text" id="username" placeholder="Full Name" required>
             </div>
+            
             <div class="form-group">
                 <input type="email" id="email" placeholder="Email Address" required>
             </div>
+            
             <div class="form-group">
                 <input type="password" id="password" placeholder="Create Password" required>
             </div>
+            
             <div class="form-group">
                 <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                <div id="passwordError" class="error-msg">Passwords do not match</div>
             </div>
-            <a href ="profile.html" type="submit" class="btn btn-primary">Sign Up</a>
+
+            <button type="submit" class="btn-primary">Create Account</button>
+
             <div class="form-footer">
                 <p>Already have an account? <a href="login.html">Login</a></p>
             </div>
         </form>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorMsg = document.getElementById('passwordError');
+            const confirmInput = document.getElementById('confirmPassword');
+            const btn = this.querySelector('.btn-primary');
+
+            // Simple Password Match Validation
+            if (password !== confirmPassword) {
+                errorMsg.style.display = 'block';
+                confirmInput.classList.add('error');
+                return; // Stop the function here
+            } else {
+                errorMsg.style.display = 'none';
+                confirmInput.classList.remove('error');
+            }
+
+            // Simulate Account Creation
+            btn.innerText = 'Creating Account...';
+            btn.style.opacity = '0.7';
+
+            setTimeout(() => {
+                alert('Account successfully created! Redirecting to your profile...');
+                // Redirect to the profile page as requested
+                window.location.href = 'profile.html';
+            }, 1000);
+        });
+
+        // Clear error when user starts typing again
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            document.getElementById('passwordError').style.display = 'none';
+            this.classList.remove('error');
+        });
+    </script>
 </body>
 </html>
