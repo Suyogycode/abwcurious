@@ -3,82 +3,529 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Setup - Cognibot</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Setup Profile - ABWcurious</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Variables & Reset --- */
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-dark: #4338ca;
+            --secondary: #fbbf24;
+            --text-main: #1f2937;
+            --text-light: #6b7280;
+            --bg-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            --white: #ffffff;
+            --error: #ef4444;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text-main);
+        }
+
+        /* --- 2. Main Container --- */
+        .wizard-container {
+            background-color: var(--white);
+            width: 100%;
+            max-width: 800px;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+            position: relative;
+        }
+
+        /* --- 3. Header & Progress --- */
+        .wizard-header {
+            padding: 2rem 2.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .logo {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .progress-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar-bg {
+            background-color: #e5e7eb;
+            height: 6px;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .progress-bar-fill {
+            background-color: var(--primary);
+            height: 100%;
+            border-radius: 10px;
+            width: 33%; /* Start at step 1 */
+            transition: width 0.4s ease;
+        }
+
+        .steps-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .step-label.active { color: var(--primary); font-weight: 700; }
+
+        /* --- 4. Form Steps (Slides) --- */
+        .form-body {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            position: relative;
+            overflow-x: hidden; /* Hide slides moving out */
+        }
+
+        .step-content {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        /* --- 5. Custom Selectors (Class/Grade) --- */
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-card {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+
+        .option-card:hover { border-color: var(--primary-light); background: #eef2ff; }
+        
+        /* Selected State */
+        .option-card.selected {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        /* --- 6. Subject Cards --- */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .subject-card {
+            position: relative;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subject-card:hover { transform: translateY(-3px); border-color: var(--primary-light); }
+
+        .subject-card.selected {
+            border-color: var(--primary);
+            background: #eef2ff;
+        }
+
+        .subject-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .subject-icon { font-size: 2rem; }
+        .subject-name { font-weight: 600; font-size: 0.95rem; }
+
+        /* --- 7. Interests & Tags --- */
+        .input-group { margin-bottom: 1.5rem; }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .tag-container {
+            border: 2px solid #e5e7eb;
+            padding: 0.5rem;
+            border-radius: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            background: white;
+        }
+        
+        .tag-container:focus-within { border-color: var(--primary); }
+
+        .tag {
+            background-color: #eef2ff;
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tag span { cursor: pointer; font-weight: bold; }
+        .tag span:hover { color: var(--primary-dark); }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            padding: 0.5rem;
+            flex: 1;
+            font-size: 0.95rem;
+            min-width: 120px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        input[type="text"]:focus { border-color: var(--primary); outline: none; }
+
+        /* --- 8. Navigation Buttons --- */
+        .wizard-footer {
+            padding: 1.5rem 2.5rem;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+        }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-prev {
+            background: transparent;
+            color: var(--text-light);
+        }
+        .btn-prev:hover { color: var(--text-main); background: #f3f4f6; }
+
+        .btn-next {
+            background-color: var(--primary);
+            color: white;
+        }
+        .btn-next:hover { background-color: var(--primary-dark); transform: translateY(-2px); }
+        .btn-next:disabled { background-color: #ccc; cursor: not-allowed; transform: none; }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .wizard-container { border-radius: 0; height: 100vh; max-width: 100%; }
+            .grid-options { grid-template-columns: repeat(3, 1fr); }
+            .subject-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
 </head>
 <body>
-    <div class="flex-shrink-0">
-        <a class="text-xl font-bold text-blue-600" href="index.html">Cognibot</a>
-    </div>
-    <div class="profile-container">
-        <form id="profileForm" class="profile-form">
-            <h2>Personalize Your Learning Journey</h2>
-            <div class="form-section">
-                <h3>Academic Details</h3>
-                <div class="form-group">
-                    <label for="class">Select Your Class</label>
-                    <select id="class" required>
-                        <option value="">Choose Your Class</option>
-                        <option value="6">Class 6</option>
-                        <option value="7">Class 7</option>
-                        <option value="8">Class 8</option>
-                        <option value="9">Class 9</option>
-                        <option value="10">Class 10</option>
-                        <option value="11">Class 11</option>
-                        <option value="12">Class 12</option>
-                    </select>
+
+    <div class="wizard-container">
+        <div class="wizard-header">
+            <a href="index.html" class="logo">ABW<span>curious</span></a>
+            
+            <div class="progress-container">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+                <div class="steps-indicator">
+                    <span class="step-label active" id="label1">Academics</span>
+                    <span class="step-label" id="label2">Subjects</span>
+                    <span class="step-label" id="label3">Profile</span>
+                </div>
+            </div>
+        </div>
+
+        <form id="profileForm" class="form-body">
+            
+            <div class="step-content active" id="step1">
+                <h2>Which grade are you in?</h2>
+                <p class="subtitle">This helps us tailor the difficulty level for you.</p>
+                
+                <div class="grid-options" id="classSelection">
+                    <div class="option-card" data-value="6">Class 6</div>
+                    <div class="option-card" data-value="7">Class 7</div>
+                    <div class="option-card" data-value="8">Class 8</div>
+                    <div class="option-card" data-value="9">Class 9</div>
+                    <div class="option-card" data-value="10">Class 10</div>
+                    <div class="option-card" data-value="11">Class 11</div>
+                    <div class="option-card" data-value="12">Class 12</div>
+                    <div class="option-card" data-value="College">College</div>
+                </div>
+                <input type="hidden" id="selectedClass" required>
+            </div>
+
+            <div class="step-content" id="step2">
+                <h2>Pick your strong suits</h2>
+                <p class="subtitle">Select at least 3 subjects you want to focus on.</p>
+
+                <div class="subject-grid" id="subjectSelection">
+                    <div class="subject-card" data-value="Math">
+                        <span class="subject-icon">📐</span>
+                        <span class="subject-name">Mathematics</span>
+                    </div>
+                    <div class="subject-card" data-value="Physics">
+                        <span class="subject-icon">⚛️</span>
+                        <span class="subject-name">Physics</span>
+                    </div>
+                    <div class="subject-card" data-value="Chemistry">
+                        <span class="subject-icon">🧪</span>
+                        <span class="subject-name">Chemistry</span>
+                    </div>
+                    <div class="subject-card" data-value="Biology">
+                        <span class="subject-icon">🧬</span>
+                        <span class="subject-name">Biology</span>
+                    </div>
+                    <div class="subject-card" data-value="CS">
+                        <span class="subject-icon">💻</span>
+                        <span class="subject-name">Computer Sci</span>
+                    </div>
+                    <div class="subject-card" data-value="Finance">
+                        <span class="subject-icon">📊</span>
+                        <span class="subject-name">Finance</span>
+                    </div>
+                    <div class="subject-card" data-value="History">
+                        <span class="subject-icon">📜</span>
+                        <span class="subject-name">History</span>
+                    </div>
+                    <div class="subject-card" data-value="Literature">
+                        <span class="subject-icon">📚</span>
+                        <span class="subject-name">Literature</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-section">
-                <h3>Choose Your Subjects</h3>
-                <div class="subject-grid">
-                    <div class="subject-checkbox">
-                        <input type="checkbox" id="math" value="Mathematics">
-                        <label for="math">Mathematics</label>
+            <div class="step-content" id="step3">
+                <h2>Tell us about yourself</h2>
+                <p class="subtitle">What sparks your curiosity?</p>
+
+                <div class="input-group">
+                    <label>Interests & Hobbies (Type & Press Enter)</label>
+                    <div class="tag-container" id="tagContainer">
+                        <input type="text" class="tag-input" id="tagInput" placeholder="e.g. Robotics, AI, Guitar...">
                     </div>
-                    <div class="subject-checkbox">
-                        <input type="checkbox" id="physics" value="Physics">
-                        <label for="physics">Physics</label>
-                    </div>
-                    <div class="subject-checkbox">
-                        <input type="checkbox" id="chemistry" value="Chemistry">
-                        <label for="chemistry">Chemistry</label>
-                    </div>
-                    <div class="subject-checkbox">
-                        <input type="checkbox" id="biology" value="Biology">
-                        <label for="biology">Biology</label>
-                    </div>
-                    <div class="subject-checkbox">
-                        <input type="checkbox" id="computer" value="Computer Science">
-                        <label for="computer">Computer Science</label>
-                    </div>
-                    <div class="subject-checkbox">
-                        <input type="checkbox" id="computer" value="Finance">
-                        <label for="computer">Finance</label>
-                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="ambition">What is your dream career?</label>
+                    <input type="text" id="ambition" placeholder="e.g. Data Scientist, Doctor, Entrepreneur">
                 </div>
             </div>
 
-            <div class="form-section">
-                <h3>Your Learning Profile</h3>
-                <div class="form-group">
-                    <label for="interests">Fields of Interest</label>
-                    <input type="text" id="interests" placeholder="e.g., AI, Space Science">
-                </div>
-                <div class="form-group">
-                    <label for="favorites">Favorite Topics</label>
-                    <input type="text" id="favorites" placeholder="e.g., Quantum Physics, Machine Learning">
-                </div>
-                <div class="form-group">
-                    <label for="ambition">Future Aspiration</label>
-                    <input type="text" id="ambition" placeholder="What do you want to become?">
-                </div>
-            </div>
-
-            <a href="dashboard.html" type="submit" class="btn btn-primary">Create Profile</a>
         </form>
+
+        <div class="wizard-footer">
+            <button type="button" class="btn btn-prev" id="prevBtn" style="visibility: hidden;">Back</button>
+            <button type="button" class="btn btn-next" id="nextBtn">Continue</button>
+        </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // --- Variables ---
+        let currentStep = 1;
+        const totalSteps = 3;
+        const form = document.getElementById('profileForm');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const progressBar = document.getElementById('progressBar');
+
+        // --- Event Listeners ---
+        
+        // 1. Class Selection Logic
+        const classOptions = document.querySelectorAll('.option-card');
+        classOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove selected from all
+                classOptions.forEach(c => c.classList.remove('selected'));
+                // Add to clicked
+                option.classList.add('selected');
+                document.getElementById('selectedClass').value = option.dataset.value;
+            });
+        });
+
+        // 2. Subject Selection Logic (Multi-select)
+        const subjectCards = document.querySelectorAll('.subject-card');
+        subjectCards.forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('selected');
+            });
+        });
+
+        // 3. Tag Input Logic
+        const tagContainer = document.getElementById('tagContainer');
+        const tagInput = document.getElementById('tagInput');
+        
+        tagInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const val = tagInput.value.trim();
+                if (val) {
+                    addTag(val);
+                    tagInput.value = '';
+                }
+            }
+        });
+
+        function addTag(text) {
+            const tag = document.createElement('div');
+            tag.classList.add('tag');
+            tag.innerHTML = `${text} <span onclick="this.parentElement.remove()">×</span>`;
+            tagContainer.insertBefore(tag, tagInput);
+        }
+
+        // --- Navigation Logic ---
+
+        nextBtn.addEventListener('click', () => {
+            if (!validateStep(currentStep)) return;
+
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateUI();
+            } else {
+                // Finish / Submit
+                submitForm();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        });
+
+        function updateUI() {
+            // Show/Hide Steps
+            document.querySelectorAll('.step-content').forEach((el, index) => {
+                el.classList.toggle('active', index + 1 === currentStep);
+            });
+
+            // Update Progress Bar
+            const percent = (currentStep / totalSteps) * 100;
+            progressBar.style.width = `${percent}%`;
+
+            // Update Labels
+            document.getElementById(`label${currentStep}`).classList.add('active');
+            
+            // Button States
+            prevBtn.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+            nextBtn.textContent = currentStep === totalSteps ? 'Complete Profile' : 'Continue';
+        }
+
+        function validateStep(step) {
+            if (step === 1) {
+                if (!document.querySelector('.option-card.selected')) {
+                    alert('Please select your grade/class.');
+                    return false;
+                }
+            }
+            if (step === 2) {
+                const selected = document.querySelectorAll('.subject-card.selected');
+                if (selected.length < 1) {
+                    alert('Please select at least one subject.');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function submitForm() {
+            nextBtn.textContent = 'Setting up...';
+            nextBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                alert('Profile created successfully!');
+                window.location.href = 'dashboard.html'; // Redirect to dashboard
+            }, 1500);
+        }
+    </script>
 </body>
 </html>
