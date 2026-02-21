@@ -1,330 +1,555 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { BookOpen, Bot, Layers, ArrowRight } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABWcurious - A Better Way of Learning</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Space+Grotesk:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-gsap.registerPlugin(ScrollTrigger);
-
-// --- 0. GLOBAL NOISE TEXTURE (For that physical, breathable feel) ---
-const NoiseOverlay = () => (
-  <svg className="pointer-events-none fixed inset-0 z-50 h-full w-full opacity-[0.05] mix-blend-overlay">
-    <filter id="noise">
-      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
-    </filter>
-    <rect width="100%" height="100%" filter="url(#noise)" />
-  </svg>
-);
-
-// --- 1. NAVBAR: The Floating Island ---
-const CinematicNavbar = () => {
-  const navRef = useRef(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        start: 'top -50',
-        end: 99999,
-        toggleClass: { className: 'bg-[#F2F0E9]/80 backdrop-blur-xl border-[#2E4036]/10 text-[#1A1A1A]', targets: navRef.current },
-        onEnter: () => gsap.to(navRef.current, { color: '#1A1A1A', duration: 0.3 }),
-        onLeaveBack: () => gsap.to(navRef.current, { backgroundColor: 'transparent', color: '#F2F0E9', border: '1px solid transparent', duration: 0.3 })
-      });
-    }, navRef);
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-6xl">
-      <nav ref={navRef} className="flex items-center justify-between px-6 py-4 rounded-[2rem] border border-transparent text-[#F2F0E9] transition-all duration-500">
-        <div className="flex flex-col">
-           <span className="font-sans font-bold tracking-tight text-xl">ABW<span className="text-[#CC5833] italic font-serif">curious</span></span>
-           <span className="text-[10px] font-mono tracking-widest opacity-70">A BETTER WAY OF LEARNING</span>
-        </div>
-        <div className="hidden md:flex gap-8 font-mono text-sm uppercase tracking-widest items-center">
-          <a href="#home" className="hover:text-[#CC5833] transition-colors">Home</a>
-          <a href="#login" className="hover:text-[#CC5833] transition-colors">Login</a>
-          <button className="px-5 py-2 bg-[#CC5833] text-[#F2F0E9] rounded-full text-sm font-bold hover:scale-[1.03] transition-transform">
-            Sign Up
-          </button>
-        </div>
-      </nav>
-    </div>
-  );
-};
-
-// --- 2. INTERACTIVE FEATURE CARDS ---
-
-// Card 1: Diagnostic Shuffler (Personalized Learning)
-const ShufflerCard = () => {
-  const [active, setActive] = useState(0);
-  const items = ["Skill Level Mapping", "Adaptive Pacing", "Interest-Based Paths"];
-
-  useEffect(() => {
-    const interval = setInterval(() => setActive((prev) => (prev + 1) % 3), 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="h-full bg-[#F2F0E9] p-8 rounded-[2rem] shadow-sm border border-[#2E4036]/5 flex flex-col justify-between group">
-      <div>
-        <BookOpen className="text-[#CC5833] mb-6" size={28} />
-        <h3 className="font-sans font-bold text-[#1A1A1A] text-xl mb-2">Personalized Learning</h3>
-        <p className="font-serif italic text-[#2E4036]/70 mb-8">Curriculum that shifts with your mind.</p>
-      </div>
-      <div className="relative h-24">
-        {items.map((item, idx) => {
-          const offset = (idx - active + 3) % 3;
-          return (
-            <div
-              key={idx}
-              className="absolute w-full p-4 bg-white rounded-xl border border-[#2E4036]/10 text-sm font-mono transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
-              style={{
-                top: offset * 10,
-                scale: 1 - offset * 0.05,
-                zIndex: 10 - offset,
-                opacity: offset === 2 ? 0 : 1
-              }}
-            >
-              <span className="text-[#CC5833]">►</span> {item}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-// Card 2: Telemetry Typewriter (AI Tutor)
-const TypewriterCard = () => {
-  const [text, setText] = useState("");
-  const fullText = "Analyzing knowledge gaps... Contextualizing complex topics... Generating personalized answer...";
-
-  useEffect(() => {
-    let i = 0;
-    const typing = setInterval(() => {
-      setText(fullText.slice(0, i));
-      i++;
-      if (i > fullText.length) i = 0;
-    }, 80);
-    return () => clearInterval(typing);
-  }, []);
-
-  return (
-    <div className="h-full bg-[#F2F0E9] p-8 rounded-[2rem] shadow-sm border border-[#2E4036]/5 flex flex-col justify-between">
-      <div>
-        <div className="flex justify-between items-center mb-6">
-          <Bot className="text-[#CC5833]" size={28} />
-          <div className="flex items-center gap-2 text-xs font-mono text-[#2E4036]/50">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> 24/7 Active
-          </div>
-        </div>
-        <h3 className="font-sans font-bold text-[#1A1A1A] text-xl mb-2">AI Tutor</h3>
-        <p className="font-serif italic text-[#2E4036]/70 mb-8">Instant, context-aware assistance.</p>
-      </div>
-      <div className="bg-[#2E4036] p-4 rounded-xl h-32 font-mono text-xs text-[#F2F0E9]/80 leading-relaxed overflow-hidden relative">
-        {text}<span className="text-[#CC5833] animate-pulse">_</span>
-      </div>
-    </div>
-  );
-};
-
-// Card 3: Cursor Protocol Scheduler (Interactive Learning)
-const CursorCard = () => {
-  return (
-    <div className="h-full bg-[#F2F0E9] p-8 rounded-[2rem] shadow-sm border border-[#2E4036]/5 flex flex-col justify-between overflow-hidden relative group">
-      <div>
-        <Layers className="text-[#CC5833] mb-6" size={28} />
-        <h3 className="font-sans font-bold text-[#1A1A1A] text-xl mb-2">Interactive AR</h3>
-        <p className="font-serif italic text-[#2E4036]/70 mb-8">High-definition immersive content.</p>
-      </div>
-      
-      <div className="grid grid-cols-4 gap-2 mt-4">
-        {[...Array(12)].map((_, i) => (
-          <div key={i} className={`h-10 rounded-md border border-[#2E4036]/10 flex items-center justify-center transition-colors duration-300 ${i === 5 || i === 10 ? 'bg-[#CC5833]/20 group-hover:bg-[#CC5833] group-hover:text-white' : 'bg-white'}`}>
-             <span className="text-[10px] opacity-20 font-mono">Mod {i+1}</span>
-          </div>
-        ))}
-        {/* Animated simulated cursor */}
-        <div className="absolute w-5 h-5 text-[#1A1A1A] bottom-12 right-12 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-[bounce_2s_infinite]">
-          <svg viewBox="0 0 24 24" fill="currentColor" stroke="white" strokeWidth="1"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 01.35-.15h6.42c.41 0 .75-.34.75-.75V3.21c0-.41-.34-.75-.75-.75H6.25c-.41 0-.75.34-.75.75z"/></svg>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// --- MAIN PAGE ASSEMBLER ---
-export default function ABWCuriousHome() {
-  const heroRef = useRef(null);
-  const philosophyRef = useRef(null);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      // Hero Animation
-      gsap.from(".hero-element", {
-        y: 40,
-        opacity: 0,
-        stagger: 0.15,
-        duration: 1.2,
-        ease: "power3.out",
-        delay: 0.2
-      });
-
-      // Philosophy Animation
-      gsap.from(".philosophy-text", {
-        scrollTrigger: {
-          trigger: philosophyRef.current,
-          start: "top 70%",
-        },
-        y: 30,
-        opacity: 0,
-        stagger: 0.2,
-        duration: 1,
-        ease: "power2.out"
-      });
-      
-      // Pinning cards
-      const cards = gsap.utils.toArray('.archive-card');
-      cards.forEach((card, i) => {
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top top+=100",
-          endTrigger: ".archive-container",
-          end: "bottom bottom",
-          pin: true,
-          pinSpacing: false,
-        });
-        
-        if (i > 0) {
-            gsap.to(cards[i - 1], {
-                scale: 0.9,
-                opacity: 0.5,
-                filter: "blur(10px)",
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top bottom",
-                    end: "top top+=100",
-                    scrub: true,
-                }
-            });
+    <style>
+        /* --- 1. VARIABLES & RESET --- */
+        :root {
+            --moss: #2E4036;
+            --clay: #CC5833;
+            --cream: #F2F0E9;
+            --charcoal: #1A1A1A;
+            --font-sans: 'Space Grotesk', sans-serif;
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-mono: 'Space Mono', monospace;
         }
-      });
-    });
-    return () => ctx.revert();
-  }, []);
 
-  return (
-    <div className="relative min-h-screen bg-[#F2F0E9] selection:bg-[#CC5833] selection:text-[#F2F0E9] font-sans">
-      <NoiseOverlay />
-      <CinematicNavbar />
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
 
-      {/* 3. HERO SECTION */}
-      <section ref={heroRef} className="relative h-[100dvh] w-full overflow-hidden bg-[#2E4036] flex items-end pb-24 px-6 md:px-12">
-        <div className="absolute inset-0 z-0">
-          {/* Earthy, calm study/library vibe */}
-          <img 
-            src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2000&auto=format&fit=crop" 
-            alt="Library Texture" 
-            className="w-full h-full object-cover opacity-30 mix-blend-luminosity"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#2E4036] via-[#2E4036]/80 to-transparent"></div>
-        </div>
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--cream);
+            color: var(--charcoal);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-        <div className="relative z-10 max-w-4xl">
-          <div className="hero-element flex items-center gap-3 mb-6">
-            <span className="text-[#CC5833] font-mono text-sm tracking-widest uppercase">Cognitive Science + AI</span>
-            <span className="h-[1px] w-12 bg-[#CC5833]/50" />
-          </div>
+        ::selection {
+            background-color: var(--clay);
+            color: var(--cream);
+        }
 
-          <h1 className="hero-element text-[#F2F0E9] leading-[0.9] tracking-tighter mb-8 flex flex-col">
-            <span className="text-5xl md:text-7xl font-sans font-bold">Curiosity is the</span>
-            <span className="text-7xl md:text-9xl font-serif italic text-[#CC5833] pr-4">Catalyst.</span>
-          </h1>
+        /* --- 2. GLOBAL NOISE TEXTURE --- */
+        .noise-overlay {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            opacity: 0.05;
+            mix-blend-mode: overlay;
+        }
 
-          <p className="hero-element text-[#F2F0E9]/70 text-lg md:text-xl max-w-xl font-light leading-relaxed mb-10">
-            Discover a smarter way to learn with interactive, adaptive education tailored entirely to your unique cognitive footprint.
-          </p>
+        /* --- 3. NAVBAR --- */
+        .navbar-container {
+            position: fixed;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 90%;
+            max-width: 1152px;
+        }
 
-          <div className="hero-element flex gap-4">
-              <button className="px-8 py-4 bg-[#CC5833] text-[#F2F0E9] font-bold rounded-full flex items-center gap-3 hover:scale-[1.03] transition-transform shadow-xl">
-                Get Started <ArrowRight size={18} />
-              </button>
-              <button className="px-8 py-4 bg-transparent border border-[#F2F0E9]/30 text-[#F2F0E9] font-bold rounded-full hover:bg-[#F2F0E9]/10 transition-colors">
-                Learn More
-              </button>
-          </div>
-        </div>
-      </section>
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-radius: 2rem;
+            border: 1px solid transparent;
+            color: var(--cream);
+            transition: all 0.5s ease;
+        }
 
-      {/* 4. FEATURES SECTION */}
-      <section className="py-32 bg-[#F2F0E9] px-6 relative z-20">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-20">
-            <h2 className="text-4xl md:text-5xl font-sans font-bold text-[#1A1A1A] mb-4">How ABWcurious Works</h2>
-            <p className="font-serif italic text-2xl text-[#2E4036]/70">We combine cognitive science with cutting-edge technology.</p>
-          </div>
+        nav.scrolled {
+            background-color: rgba(242, 240, 233, 0.8);
+            backdrop-filter: blur(16px);
+            border-color: rgba(46, 64, 54, 0.1);
+            color: var(--charcoal);
+        }
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-auto md:h-[400px]">
-            <ShufflerCard />
-            <TypewriterCard />
-            <CursorCard />
-          </div>
-        </div>
-      </section>
+        .nav-brand {
+            display: flex;
+            flex-direction: column;
+        }
 
-      {/* 5. THE MANIFESTO (Philosophy) */}
-      <section ref={philosophyRef} className="py-40 bg-[#2E4036] px-6 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto relative z-10 text-center">
-          <p className="philosophy-text text-[#F2F0E9]/50 font-sans text-lg md:text-2xl mb-8">
-            Most platforms focus on: <span className="underline decoration-[#CC5833]/50 underline-offset-4">standardized testing and rigid pacing.</span>
-          </p>
-          <h2 className="philosophy-text text-5xl md:text-7xl font-serif italic text-[#F2F0E9] leading-tight">
-            We focus on: <br />
-            <span className="text-[#CC5833]">adaptive evolution.</span>
-          </h2>
-        </div>
-      </section>
+        .nav-brand h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
 
-      {/* 6. PROTOCOL (Stacking Archive) */}
-      <section className="archive-container bg-[#F2F0E9] py-32 px-6 relative h-[250vh]">
-         <div className="max-w-4xl mx-auto relative">
-            
-            <div className="archive-card w-full h-[60vh] bg-white rounded-[3rem] p-12 shadow-xl border border-[#2E4036]/10 flex flex-col justify-center relative overflow-hidden mb-8">
-               <div className="text-8xl font-serif italic text-[#2E4036]/10 absolute -top-4 -right-4">01</div>
-               <h3 className="text-4xl font-sans font-bold text-[#1A1A1A] mb-4">Baseline Assessment</h3>
-               <p className="text-xl font-serif text-[#2E4036]/80 max-w-lg">
-                 Before you start, our engine analyzes your current knowledge base and preferred learning modalities to build a custom curriculum graph.
-               </p>
+        .nav-brand h1 span {
+            color: var(--clay);
+            font-family: var(--font-serif);
+            font-style: italic;
+        }
+
+        .nav-brand p {
+            font-size: 0.625rem;
+            font-family: var(--font-mono);
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 2rem;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+        }
+
+        .nav-links a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--clay); }
+
+        .btn {
+            padding: 0.5rem 1.25rem;
+            background-color: var(--clay);
+            color: var(--cream);
+            border-radius: 9999px;
+            font-weight: 700;
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn:hover { transform: scale(1.03); }
+
+        /* --- 4. HERO SECTION --- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            background-color: var(--moss);
+            display: flex;
+            align-items: flex-end;
+            padding: 0 1.5rem 6rem;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) { .hero { padding-left: 3rem; padding-right: 3rem; } }
+
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%; height: 100%; object-fit: cover;
+            opacity: 0.3;
+            mix-blend-mode: luminosity;
+        }
+
+        .hero-bg .gradient {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, var(--moss) 0%, rgba(46, 64, 54, 0.8) 50%, transparent 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 56rem;
+        }
+
+        .hero-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-label span {
+            color: var(--clay);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .hero-label .line {
+            height: 1px; width: 3rem; background-color: rgba(204, 88, 51, 0.5);
+        }
+
+        .hero h2 {
+            color: var(--cream);
+            line-height: 0.9;
+            letter-spacing: -0.05em;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero h2 .sans { font-size: 3rem; font-weight: 700; }
+        .hero h2 .serif { font-size: 4.5rem; font-family: var(--font-serif); font-style: italic; color: var(--clay); padding-right: 1rem; }
+        
+        @media (min-width: 768px) {
+            .hero h2 .sans { font-size: 4.5rem; }
+            .hero h2 .serif { font-size: 8rem; }
+        }
+
+        .hero p {
+            color: rgba(242, 240, 233, 0.7);
+            font-size: 1.125rem;
+            max-width: 36rem;
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-buttons { display: flex; gap: 1rem; }
+
+        .btn-large { padding: 1rem 2rem; font-size: 1rem; }
+        .btn-outline {
+            background: transparent; border: 1px solid rgba(242, 240, 233, 0.3); color: var(--cream);
+        }
+        .btn-outline:hover { background: rgba(242, 240, 233, 0.1); }
+
+        /* --- 5. FEATURES SECTION --- */
+        .features { padding: 8rem 1.5rem; background-color: var(--cream); position: relative; z-index: 20; }
+        .max-w-7xl { max-width: 80rem; margin: 0 auto; }
+
+        .section-header { margin-bottom: 5rem; }
+        .section-header h2 { font-size: 2.25rem; font-weight: 700; color: var(--charcoal); margin-bottom: 1rem; }
+        .section-header p { font-size: 1.5rem; font-family: var(--font-serif); font-style: italic; color: rgba(46, 64, 54, 0.7); }
+        
+        @media (min-width: 768px) { .section-header h2 { font-size: 3rem; } }
+
+        .grid-3 { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        @media (min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+
+        .card {
+            background-color: var(--cream);
+            padding: 2rem;
+            border-radius: 2rem;
+            border: 1px solid rgba(46, 64, 54, 0.05);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            min-height: 400px;
+        }
+
+        .card svg { color: var(--clay); margin-bottom: 1.5rem; width: 28px; height: 28px; }
+        .card h3 { font-size: 1.25rem; font-weight: 700; color: var(--charcoal); margin-bottom: 0.5rem; }
+        .card > p { font-family: var(--font-serif); font-style: italic; color: rgba(46, 64, 54, 0.7); margin-bottom: 2rem; }
+
+        /* Card 1: Shuffler */
+        .shuffler-container { position: relative; height: 6rem; }
+        .shuffler-item {
+            position: absolute;
+            width: 100%;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(46, 64, 54, 0.1);
+            font-size: 0.875rem;
+            font-family: var(--font-mono);
+            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .shuffler-item span { color: var(--clay); }
+
+        /* Card 2: Typewriter */
+        .live-feed { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .pulse-dot { width: 8px; height: 8px; background-color: #22c55e; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        .feed-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-family: var(--font-mono); color: rgba(46, 64, 54, 0.5); }
+        .type-box { background-color: var(--moss); padding: 1rem; border-radius: 0.75rem; height: 8rem; font-family: var(--font-mono); font-size: 0.75rem; color: rgba(242, 240, 233, 0.8); line-height: 1.6; }
+        .cursor { color: var(--clay); animation: pulse 1s infinite; }
+
+        /* Card 3: Cursor */
+        .grid-blocks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 1rem; position: relative; }
+        .block { height: 2.5rem; border-radius: 0.375rem; border: 1px solid rgba(46, 64, 54, 0.1); background: white; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .block span { font-size: 0.625rem; opacity: 0.2; font-family: var(--font-mono); }
+        .block.active { background: rgba(204, 88, 51, 0.2); }
+        .card:hover .block.active { background: var(--clay); color: white; }
+        .fake-cursor { position: absolute; bottom: -1rem; right: -1rem; width: 20px; height: 20px; color: var(--charcoal); opacity: 0; transition: opacity 0.3s; animation: bounce 2s infinite; }
+        .card:hover .fake-cursor { opacity: 1; }
+
+        @keyframes pulse { 50% { opacity: .5; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); } }
+
+        /* --- 6. PHILOSOPHY --- */
+        .philosophy { padding: 10rem 1.5rem; background-color: var(--moss); position: relative; overflow: hidden; text-align: center; }
+        .philosophy-inner { position: relative; z-index: 10; max-width: 64rem; margin: 0 auto; }
+        .philosophy p { color: rgba(242, 240, 233, 0.5); font-size: 1.125rem; margin-bottom: 2rem; }
+        .philosophy p span { text-decoration: underline; text-decoration-color: rgba(204, 88, 51, 0.5); text-underline-offset: 4px; }
+        .philosophy h2 { font-size: 3rem; font-family: var(--font-serif); font-style: italic; color: var(--cream); line-height: 1.1; }
+        .philosophy h2 .clay { color: var(--clay); }
+        @media (min-width: 768px) { .philosophy p { font-size: 1.5rem; } .philosophy h2 { font-size: 4.5rem; } }
+
+        /* --- 7. PROTOCOL (STACKING ARCHIVE) --- */
+        .protocol { background-color: var(--cream); padding: 8rem 1.5rem; height: 250vh; position: relative; }
+        .protocol-inner { max-width: 56rem; margin: 0 auto; position: relative; }
+        .archive-card {
+            width: 100%; height: 60vh; border-radius: 3rem; padding: 3rem; margin-bottom: 2rem;
+            display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden;
+            border: 1px solid rgba(46, 64, 54, 0.1);
+        }
+        .archive-card:nth-child(1) { background-color: white; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .archive-card:nth-child(2) { background-color: var(--cream); border-color: rgba(46, 64, 54, 0.2); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        
+        .archive-num { position: absolute; top: -1rem; right: -1rem; font-size: 6rem; font-family: var(--font-serif); font-style: italic; line-height: 1; }
+        .archive-card:nth-child(1) .archive-num { color: rgba(46, 64, 54, 0.05); }
+        .archive-card:nth-child(2) .archive-num { color: rgba(204, 88, 51, 0.1); }
+
+        .archive-card h3 { font-size: 2.25rem; font-weight: 700; color: var(--charcoal); margin-bottom: 1rem; }
+        .archive-card p { font-size: 1.25rem; font-family: var(--font-serif); color: rgba(46, 64, 54, 0.8); max-width: 32rem; }
+
+        /* --- 8. FOOTER --- */
+        footer { background-color: var(--charcoal); color: var(--cream); padding: 5rem 1.5rem 2.5rem; border-radius: 4rem 4rem 0 0; position: relative; z-index: 20; }
+        .footer-grid { max-width: 80rem; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 5rem; }
+        @media (min-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } .footer-grid .right { text-align: right; display: flex; justify-content: flex-end; align-items: center; } }
+        
+        footer h2 { font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; }
+        footer h2 span { color: var(--clay); font-family: var(--font-serif); font-style: italic; }
+        footer p { font-family: var(--font-serif); font-style: italic; color: #9ca3af; }
+        
+        .status-badge { display: inline-flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.875rem; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        .footer-bottom { max-width: 80rem; margin: 0 auto; text-align: center; font-family: var(--font-mono); font-size: 0.75rem; color: #6b7280; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; }
+
+    </style>
+</head>
+<body>
+
+    <svg class="noise-overlay">
+        <filter id="noise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noise)" />
+    </svg>
+
+    <div class="navbar-container">
+        <nav id="navbar">
+            <div class="nav-brand">
+                <h1>ABW<span>curious</span></h1>
+                <p>A BETTER WAY OF LEARNING</p>
             </div>
-
-            <div className="archive-card w-full h-[60vh] bg-[#F2F0E9] rounded-[3rem] p-12 shadow-2xl border border-[#2E4036]/20 flex flex-col justify-center relative overflow-hidden mb-8">
-               <div className="text-8xl font-serif italic text-[#CC5833]/10 absolute -top-4 -right-4">02</div>
-               <h3 className="text-4xl font-sans font-bold text-[#1A1A1A] mb-4">Active Synthesis</h3>
-               <p className="text-xl font-serif text-[#2E4036]/80 max-w-lg">
-                 Move away from passive video watching. Engage with immersive AR modules and let your AI Tutor test your comprehension in real-time.
-               </p>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#login">Login</a>
+                <a href="#signup" class="btn">Sign Up</a>
             </div>
-
-         </div>
-      </section>
-
-      {/* 7. FOOTER */}
-      <footer className="bg-[#1A1A1A] text-[#F2F0E9] pt-20 pb-10 px-6 rounded-t-[4rem] relative z-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
-          <div>
-             <h2 className="text-4xl font-sans font-bold mb-4">ABW<span className="text-[#CC5833] font-serif italic">curious</span></h2>
-            <p className="font-serif italic text-gray-400">A Better Way of Learning.</p>
-          </div>
-          <div className="flex flex-col md:items-end justify-center">
-             <div className="flex items-center gap-3 font-mono text-sm bg-white/5 px-4 py-2 rounded-full border border-white/10">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                AI Core Online
-             </div>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto text-center font-mono text-xs text-gray-500 border-t border-white/10 pt-8">
-          © {new Date().getFullYear()} ABWcurious. All rights reserved.
-        </div>
-      </footer>
+        </nav>
     </div>
-  );
-}
+
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2000&auto=format&fit=crop" alt="Library">
+            <div class="gradient"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-label hero-anim">
+                <span>Cognitive Science + AI</span>
+                <div class="line"></div>
+            </div>
+            
+            <h2 class="hero-anim">
+                <span class="sans">Curiosity is the</span>
+                <span class="serif">Catalyst.</span>
+            </h2>
+            
+            <p class="hero-anim">Discover a smarter way to learn with interactive, adaptive education tailored entirely to your unique cognitive footprint.</p>
+            
+            <div class="hero-buttons hero-anim">
+                <a href="#features" class="btn btn-large">
+                    Get Started 
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#more" class="btn btn-large btn-outline">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="max-w-7xl">
+            <div class="section-header">
+                <h2>How ABWcurious Works</h2>
+                <p>We combine cognitive science with cutting-edge technology.</p>
+            </div>
+
+            <div class="grid-3">
+                <div class="card">
+                    <div>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        <h3>Personalized Learning</h3>
+                        <p>Curriculum that shifts with your mind.</p>
+                    </div>
+                    <div class="shuffler-container">
+                        <div class="shuffler-item" style="top: 0px; transform: scale(1); z-index: 10; opacity: 1;"><span>►</span> Skill Level Mapping</div>
+                        <div class="shuffler-item" style="top: 10px; transform: scale(0.95); z-index: 9; opacity: 1;"><span>►</span> Adaptive Pacing</div>
+                        <div class="shuffler-item" style="top: 20px; transform: scale(0.9); z-index: 8; opacity: 0;"><span>►</span> Interest-Based Paths</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="live-feed">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                            <div class="feed-label"><span class="pulse-dot"></span> 24/7 Active</div>
+                        </div>
+                        <h3>AI Tutor</h3>
+                        <p>Instant, context-aware assistance.</p>
+                    </div>
+                    <div class="type-box">
+                        <span id="typewriter"></span><span class="cursor">_</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                        <h3>Interactive AR</h3>
+                        <p>High-definition immersive content.</p>
+                    </div>
+                    <div class="grid-blocks" id="cursor-grid">
+                        <svg class="fake-cursor" viewBox="0 0 24 24" fill="currentColor" stroke="white" stroke-width="1"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 01.35-.15h6.42c.41 0 .75-.34.75-.75V3.21c0-.41-.34-.75-.75-.75H6.25c-.41 0-.75.34-.75.75z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="philosophy">
+        <div class="philosophy-inner">
+            <p class="phil-anim">Most platforms focus on: <span>standardized testing and rigid pacing.</span></p>
+            <h2 class="phil-anim">We focus on: <br><span class="clay">adaptive evolution.</span></h2>
+        </div>
+    </section>
+
+    <section class="protocol archive-container">
+        <div class="protocol-inner">
+            <div class="archive-card">
+                <div class="archive-num">01</div>
+                <h3>Baseline Assessment</h3>
+                <p>Before you start, our engine analyzes your current knowledge base and preferred learning modalities to build a custom curriculum graph.</p>
+            </div>
+            <div class="archive-card">
+                <div class="archive-num">02</div>
+                <h3>Active Synthesis</h3>
+                <p>Move away from passive video watching. Engage with immersive AR modules and let your AI Tutor test your comprehension in real-time.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h2>ABW<span class="clay">curious</span></h2>
+                <p>A Better Way of Learning.</p>
+            </div>
+            <div class="right">
+                <div class="status-badge">
+                    <span class="pulse-dot"></span> AI Core Online
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 ABWcurious. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        // Card 1: Shuffler Logic
+        const shufflerItems = document.querySelectorAll('.shuffler-item');
+        let activeIndex = 0;
+        setInterval(() => {
+            activeIndex = (activeIndex + 1) % 3;
+            shufflerItems.forEach((item, idx) => {
+                const offset = (idx - activeIndex + 3) % 3;
+                item.style.top = `${offset * 10}px`;
+                item.style.transform = `scale(${1 - offset * 0.05})`;
+                item.style.zIndex = 10 - offset;
+                item.style.opacity = offset === 2 ? 0 : 1;
+            });
+        }, 3000);
+
+        // Card 2: Typewriter Logic
+        const typeText = "Analyzing knowledge gaps... Contextualizing complex topics... Generating personalized answer...";
+        const typeEl = document.getElementById('typewriter');
+        let typeIndex = 0;
+        setInterval(() => {
+            typeEl.innerText = typeText.slice(0, typeIndex);
+            typeIndex++;
+            if (typeIndex > typeText.length) typeIndex = 0;
+        }, 80);
+
+        // Card 3: Grid Generation
+        const grid = document.getElementById('cursor-grid');
+        for (let i = 0; i < 12; i++) {
+            const block = document.createElement('div');
+            block.className = 'block' + (i === 5 || i === 10 ? ' active' : '');
+            block.innerHTML = `<span>Mod ${i+1}</span>`;
+            grid.insertBefore(block, grid.lastElementChild);
+        }
+
+        // GSAP Scroll Animations
+        gsap.from(".hero-anim", {
+            y: 40, opacity: 0, stagger: 0.15, duration: 1.2, ease: "power3.out", delay: 0.2
+        });
+
+        gsap.from(".phil-anim", {
+            scrollTrigger: { trigger: ".philosophy", start: "top 70%" },
+            y: 30, opacity: 0, stagger: 0.2, duration: 1, ease: "power2.out"
+        });
+
+        const cards = gsap.utils.toArray('.archive-card');
+        cards.forEach((card, i) => {
+            ScrollTrigger.create({
+                trigger: card, start: "top top+=100", endTrigger: ".archive-container", end: "bottom bottom", pin: true, pinSpacing: false,
+            });
+            if (i > 0) {
+                gsap.to(cards[i - 1], {
+                    scale: 0.9, opacity: 0.5, filter: "blur(10px)",
+                    scrollTrigger: { trigger: card, start: "top bottom", end: "top top+=100", scrub: true }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
